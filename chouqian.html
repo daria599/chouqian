@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>在线抽签工具</title>
+    <style>
+        body { text-align: center; padding: 50px; font-family: Arial; }
+        #inputArea { margin: 20px auto; max-width: 500px; }
+        textarea { width: 80%; height: 150px; padding: 10px; margin: 10px 0; }
+        button { 
+            padding: 12px 25px; 
+            background: #4CAF50; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px;
+        }
+        #result { 
+            font-size: 28px; 
+            margin: 30px 0; 
+            color: #ff4444; 
+            font-weight: bold; 
+        }
+    </style>
+</head>
+<body>
+    <h1>✨ 网页抽签工具 ✨</h1>
+    <div id="inputArea">
+        <p>请输入选项（每行一个，例如：苹果/香蕉/橘子）</p>
+        <textarea id="options" placeholder="例子：
+选项1
+选项2
+选项3"></textarea><br>
+        <button onclick="startDraw()">开始抽签！</button>
+    </div>
+    <div id="result"></div>
+
+    <script>
+        function startDraw() {
+            // 获取用户输入的选项
+            const rawText = document.getElementById('options').value;
+            const options = rawText.split('\n').filter(opt => opt.trim() !== '');
+            
+            // 检查是否有输入
+            if (options.length < 2) {
+                alert("至少需要输入两个选项！");
+                return;
+            }
+
+            // 禁用按钮防止重复点击
+            const button = document.querySelector('button');
+            button.disabled = true;
+            
+            // 抽签动画效果
+            let count = 0;
+            const resultDiv = document.getElementById('result');
+            const interval = setInterval(() => {
+                resultDiv.textContent = options[Math.floor(Math.random() * options.length)];
+                count++;
+                if (count > 25) { // 动画持续约1.25秒
+                    clearInterval(interval);
+                    const finalIndex = Math.floor(Math.random() * options.length);
+                    resultDiv.textContent = `🎉 结果：${options[finalIndex]} 🎉`;
+                    button.disabled = false; // 恢复按钮
+                }
+            }, 50); // 每50毫秒切换一次
+        }
+    </script>
+</body>
+</html>
